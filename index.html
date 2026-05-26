@@ -3,479 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoSync | Neuro-Inclusive Space</title>
+    <title>IncludeMe - Your Safe Space</title>
+    <!-- Google Fonts for a clean, accessible sans-serif typeface -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables for Sensory-Friendly Design */
         :root {
-            --bg-color: #fdfaf5; 
-            --primary-sage: #8bad95; 
-            --secondary-blue: #7da1bf; 
-            --text-dark: #333333;
-            --card-white: #ffffff;
-            --accent-yellow: #fff9e6;
+            /* Soft, high-contrast, neurodivergent-friendly color palette */
+            --bg-color: #f4f7f6;
+            --text-color: #2d3748;
+            --primary: #6c5ce7;
+            --primary-hover: #5b4bc4;
+            --accent: #a8e6cf;
+            --card-bg: #ffffff;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-dark);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            padding-bottom: 80px; 
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 420px;
-            background: var(--card-white);
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            overflow: hidden;
-            border: 1px solid #eef2ef;
-            min-height: 80vh;
+        /* --- Top Navigation Bar --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 10%;
+            background: var(--card-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .login-btn {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* --- Hero / Home Screen --- */
+        .hero {
             display: flex;
             flex-direction: column;
-            position: relative;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem 1rem;
+            min-height: 70vh;
         }
 
-        /* --- AUTH / SIGN-IN SCREEN STYLES --- */
-        .auth-overlay {
-            position: absolute;
+        .hero h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            color: #5a6578;
+        }
+
+        .cta-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .cta-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- Sign Up Modal --- */
+        .modal-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-color);
-            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 30px;
-            box-sizing: border-box;
-            transition: 0.5s ease;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10;
         }
 
-        .auth-card {
-            background: var(--card-white);
-            padding: 30px 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
             width: 100%;
-            box-sizing: border-box;
-            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
         }
 
-        .auth-card h2 {
-            margin-bottom: 5px;
-            color: var(--primary-sage);
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            font-family: 'Fredoka', sans-serif;
         }
 
-        .auth-card p {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 20px;
+        .form-group {
+            margin-bottom: 1.2rem;
         }
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .input-group label {
+        .form-group label {
             display: block;
-            font-size: 12px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .input-group input {
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background: #fafafa;
-        }
-
-        .input-group input:focus {
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
             outline: none;
-            border-color: var(--primary-sage);
-            background: #fff;
         }
 
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary-sage);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+        .form-group input:focus {
+            border-color: var(--primary);
         }
 
-        .auth-btn:hover {
-            opacity: 0.9;
+        /* --- Passport Dashboard (Hidden by default) --- */
+        .passport-section {
+            display: none;
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
         }
 
-        .switch-auth-mode {
-            margin-top: 15px;
-            font-size: 13px;
-            color: var(--secondary-blue);
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* --- APP MAIN STYLES --- */
-        header {
-            background-color: var(--primary-sage);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-        }
-
-        header h1 { margin: 0; font-size: 26px; letter-spacing: 0.5px; }
-        header p { margin: 5px 0 0; opacity: 0.9; font-size: 13px; }
-
-        .content-view {
-            padding: 20px;
-            flex-grow: 1;
-            display: none; 
-        }
-
-        .content-view.active {
-            display: block; 
-        }
-
-        h2 {
-            font-size: 20px;
-            color: var(--text-dark);
-            margin-top: 0;
-        }
-
-        .hero-box {
-            background: linear-gradient(135deg, #eef5f0, #e6edf2);
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .hero-box p { font-size: 14px; line-height: 1.5; color: #555; }
-        
-        .feature-card {
-            background: var(--bg-color);
-            border: 1px solid #e2ded7;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-        .feature-card h3 { margin: 0 0 5px 0; font-size: 16px; color: var(--secondary-blue); }
-        .feature-card p { margin: 0; font-size: 13px; color: #666; }
-
-        .status-card {
-            background: #f0f4f1;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .battery-container {
-            height: 18px;
-            background: #ddd;
-            border-radius: 10px;
-            margin: 10px 0;
+        .passport-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 8px solid var(--primary);
             overflow: hidden;
         }
-        .battery-level {
-            width: 70%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary-blue), var(--primary-sage));
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--primary-sage);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .tag-container {
+
+        .passport-header {
+            background: #fafafa;
+            padding: 2rem;
+            border-bottom: 1px solid #edf2f7;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
         }
-        .tag {
-            padding: 8px 14px;
-            background: #f0f0f0;
+
+        .passport-body {
+            padding: 2rem;
+        }
+
+        .sensitivity-tag {
+            display: inline-block;
+            background: #edf2f7;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
-            font-size: 13px;
+            margin: 0.3rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s;
-        }
-        .tag.active {
-            background: var(--secondary-blue);
-            color: white;
-        }
-        .instruction-box {
-            background: var(--accent-yellow);
-            border-left: 5px solid #ebd36e;
-            padding: 15px;
-            font-size: 13px;
-            border-radius: 4px;
-            line-height: 1.4;
+            transition: all 0.2s;
         }
 
-        .todo-item {
-            display: flex;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border: 1px solid #eee;
-            cursor: pointer;
-        }
-        .todo-item input {
-            margin-right: 15px;
-            transform: scale(1.2);
-            accent-color: var(--primary-sage);
-        }
-        .todo-item.completed span {
-            text-decoration: line-through;
-            color: #aaa;
+        .sensitivity-tag.active {
+            background: #ffeaa7;
+            border: 1px solid #f1c40f;
+            color: #d35400;
         }
 
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+        .notes-area {
             width: 100%;
-            max-width: 420px;
-            background: white;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.03);
-            border-radius: 20px 20px 0 0;
+            height: 120px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-top: 1rem;
+            resize: vertical;
+            font-size: 1rem;
         }
-        .nav-btn {
-            background: none;
+
+        .save-btn {
+            background: #2ecc71;
+            color: white;
             border: none;
-            font-size: 12px;
-            font-weight: bold;
-            color: #888;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
+            font-weight: 600;
+            margin-top: 1rem;
         }
-        .nav-btn .icon { font-size: 18px; }
-        .nav-btn.active {
-            color: var(--primary-sage);
+
+        .save-btn:hover {
+            background: #27ae60;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-
-    <!-- SIGN IN / SIGN UP SCREEN -->
-    <div id="auth-screen" class="auth-overlay">
-        <div class="auth-card">
-            <h2 id="auth-title">Welcome to EchoSync</h2>
-            <p id="auth-subtitle">Sign up to save your personalized passport</p>
-            
-            <form id="auth-form" onsubmit="handleAuth(event)">
-                <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" required placeholder="name@example.com">
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required placeholder="••••••••" minlength="6">
-                </div>
-                <button type="submit" id="submit-btn" class="auth-btn">Create Account</button>
-            </form>
-            
-            <div id="toggle-auth" class="switch-auth-mode" onclick="toggleAuthMode()">
-                Already have an account? Sign In
-            </div>
-        </div>
-    </div>
-
-    <!-- MAIN APP HEADER -->
+    <!-- Top Bar Navigation -->
     <header>
-        <h1>EchoSync</h1>
-        <p>A Space Suited to Your Brain</p>
+        <div class="logo">IncludeMe</div>
+        <button class="login-btn" onclick="toggleModal()">Log In / Sign Up</button>
     </header>
 
-    <!-- 1. HOME VIEW -->
-    <div id="home-view" class="content-view active">
-        <div class="hero-box">
-            <h2>Welcome to EchoSync</h2>
-            <p>We believe acceptance comes from understanding. EchoSync helps you map out your daily routines and share your unique needs smoothly with teachers, friends, or coworkers.</p>
-        </div>
-        
-        <div class="feature-card">
-            <h3>🪪 Communication Passport</h3>
-            <p>Create a shareable snapshot of your current energy levels and sensory preferences.</p>
-        </div>
-        
-        <div class="feature-card">
-            <h3>✅ Accommodating Checklist</h3>
-            <p>Keep track of tasks with an executive dysfunction-friendly interface that reduces mental clutter.</p>
+    <!-- Home Screen / Hero Section -->
+    <main id="home-screen" class="hero">
+        <h1>You Belong Here Exactly As You Are</h1>
+        <p>Welcome to a space built entirely to ensure neurodiverse individuals feel accepted, understood, and safely celebrated. Your comfort is our priority.</p>
+        <button class="cta-btn" onclick="toggleModal()">Create Your Sensory Passport</button>
+    </main>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h2>Join Our Community</h2>
+            <form id="signupForm" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="username">Preferred Name</label>
+                    <input type="text" id="username" required placeholder="What should we call you?">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+                <button type="submit" class="cta-btn" style="width: 100%; margin-top: 1rem;">Sign Up</button>
+            </form>
         </div>
     </div>
 
-    <!-- 2. PASSPORT VIEW -->
-    <div id="passport-view" class="content-view">
-        <h2>My Connection Passport</h2>
-        
-        <div class="status-card">
-            <strong>Current Social Battery: 70%</strong>
-            <div class="battery-container">
-                <div class="battery-level"></div>
+    <!-- Interactive Sensory Passport Section -->
+    <section class="passport-section" id="passportSection">
+        <h2 style="margin-bottom: 1.5rem; text-align: center; font-family: 'Fredoka', sans-serif;">Your Dynamic Passport</h2>
+        <div class="passport-card">
+            <div class="passport-header">
+                <div>
+                    <h3 id="passportName">Holder: Guest</h3>
+                    <p style="color: #718096; font-size: 0.9rem;">Tailor this profile to share your communication and sensory needs.</p>
+                </div>
+                <span style="background: var(--accent); padding: 0.5rem 1rem; border-radius: 50px; font-weight: bold; font-size: 0.8rem;">ACTIVE</span>
             </div>
-            <small>Pace yourself! Doing fine, but processing takes energy.</small>
-        </div>
+            
+            <div class="passport-body">
+                <h4>Sensory & Environmental Sensitivities</h4>
+                <p style="color: #718096; font-size: 0.85rem; margin-bottom: 1rem;">Tap to highlight elements that challenge or overwhelm you:</p>
+                
+                <div id="tagsContainer">
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Bright Lights / Fluorescents</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Loud / Sudden Noises</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Crowded Spaces</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">High Pitch Sounds</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Unexpected Textures</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Direct Eye Contact Requirements</span>
+                    <span class="sensitivity-tag" onclick="toggleTag(this)">Vague / Unclear Directions</span>
+                </div>
 
-        <span class="section-title">Sensory Signals</span>
-        <div class="tag-container">
-            <div class="tag active">🎧 Noise Sensitive</div>
-            <div class="tag">☀️ Light Sensitive</div>
-            <div class="tag active">🌱 Prefers Low Stimulation</div>
+                <h4 style="margin-top: 2rem;">Personal Notes & Accommodation Needs</h4>
+                <textarea class="notes-area" id="passportNotes" placeholder="Example: I prefer written instructions over verbal ones, or I might need to step away into a quiet room if overstimulated..."></textarea>
+                
+                <button class="save-btn" onclick="savePassport()">Save Passport Changes</button>
+            </div>
         </div>
+    </section>
 
-        <span class="section-title">Communication Style</span>
-        <div class="tag-container">
-            <div class="tag active">Direct & Clear</div>
-            <div class="tag">Needs Processing Time</div>
-            <div class="tag">Text Preferred</div>
-        </div>
+    <!-- Logic Script -->
+    <script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const homeScreen = document.getElementById('home-screen');
+        const passportSection = document.getElementById('passportSection');
+        const passportName = document.getElementById('passportName');
 
-        <span class="section-title">A Note for Others</span>
-        <div class="instruction-box">
-            "If I'm wearing headphones or looking away, I am still actively listening! I use these strategies to focus and manage sensory input."
-        </div>
-    </div>
-
-    <!-- 3. CHECKLIST VIEW -->
-    <div id="checklist-view" class="content-view">
-        <h2>Daily Accommodating Checklist</h2>
-        <p style="font-size: 13px; color:#666; margin-bottom: 20px;">Break your day down into bite-sized milestones. No rush, go step by step.</p>
-        
-        <div class="todo-item">
-            <input type="checkbox" onclick="toggleTask(this)">
-            <span>Check morning agenda & schedule</span>
-        </div>
-        <div class="todo-item">
-            <input type="checkbox" onclick="toggleTask(this)">
-            <span>Review presentation notes with AI helper</span>
-        </div>
-        <div class="todo-item">
-            <input type="checkbox" onclick="toggleTask(this)">
-            <span>Organize desk setup (Minimize sensory clutter)</span>
-        </div>
-        <div class="todo-item">
-            <input type="checkbox" onclick="toggleTask(this)">
-            <span>Take a scheduled 5-minute quiet breathing break</span>
-        </div>
-    </div>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="nav-bar">
-        <button class="nav-btn active" onclick="switchView('home-view', this)">
-            <span class="icon">🏠</span><span>Home</span>
-        </button>
-        <button class="nav-btn" onclick="switchView('passport-view', this)">
-            <span class="icon">🪪</span><span>Passport</span>
-        </button>
-        <button class="nav-btn" onclick="switchView('checklist-view', this)">
-            <span class="icon">✅</span><span>Checklist</span>
-        </button>
-    </nav>
-</div>
-
-<script>
-    let isSignUpMode = true;
-
-    // Toggle between Sign In and Sign Up interface
-    function toggleAuthMode() {
-        isSignUpMode = !isSignUpMode;
-        const title = document.getElementById('auth-title');
-        const subtitle = document.getElementById('auth-subtitle');
-        const submitBtn = document.getElementById('submit-btn');
-        const toggleLink = document.getElementById('toggle-auth');
-
-        if (isSignUpMode) {
-            title.innerText = "Welcome to EchoSync";
-            subtitle.innerText = "Sign up to save your personalized passport";
-            submitBtn.innerText = "Create Account";
-            toggleLink.innerText = "Already have an account? Sign In";
-        } else {
-            title.innerText = "Welcome Back";
-            subtitle.innerText = "Sign in to access your EchoSync profile";
-            submitBtn.innerText = "Sign In";
-            toggleLink.innerText = "Don't have an account? Sign Up";
+        // Open/Close the Sign-Up Window
+        function toggleModal() {
+            modalOverlay.classList.toggle('active');
         }
-    }
 
-    // Handles form submit during your demonstration
-    function handleAuth(event) {
-        event.preventDefault();
-        const email = document.getElementById('email').value;
-        
-        if(isSignUpMode) {
-            alert(`Success! Account created securely for: ${email}\n\n(For your real presentation, connect this logic to a cloud handler like Supabase Auth).`);
-        } else {
-            alert(`Welcome back, ${email}! Loading profile...`);
+        // Close modal if user clicks outside of it
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) toggleModal();
+        });
+
+        // Simulate User Account Creation
+        function handleSignUp(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('username').value;
+            
+            // Personalize the passport profile name
+            passportName.innerText = `Holder: ${nameInput}`;
+            
+            // Close modal, hide home landing page, display user passport dashboard
+            toggleModal();
+            homeScreen.style.display = 'none';
+            passportSection.style.display = 'block';
         }
-        
-        // Hide auth screen and open app
-        document.getElementById('auth-screen').style.display = 'none';
-    }
 
-    // Main App Navigation functionality
-    function switchView(viewId, clickedBtn) {
-        document.querySelectorAll('.content-view').forEach(view => {
-            view.classList.remove('active');
-        });
-        document.getElementById(viewId).classList.add('active');
-        
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        clickedBtn.classList.add('active');
-    }
-
-    // Toggle passport tags on click
-    document.querySelectorAll('.tag').forEach(tag => {
-        tag.addEventListener('click', () => {
+        // Toggle sensitivity selections on and off
+        function toggleTag(tag) {
             tag.classList.toggle('active');
-        });
-    });
-
-    // Checkbox custom behavior
-    function toggleTask(checkbox) {
-        const item = checkbox.parentElement;
-        if (checkbox.checked) {
-            item.classList.add('completed');
-        } else {
-            item.classList.remove('completed');
         }
-    }
-</script>
 
+        // Save data message feedback
+        function savePassport() {
+            alert("Your sensory preferences have been safely preserved!");
+        }
+    </script>
 </body>
 </html>
